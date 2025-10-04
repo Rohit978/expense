@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpenseFlow Pro - Enhanced Minimal Theme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #f8fafc;
+            --foreground: #ffffff;
+            --border: #e5e7eb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --primary-light: #eff6ff;
+            --green: #10b981;
+            --green-light: #ecfdf5;
+            --yellow: #f59e0b;
+            --yellow-light: #fffbeb;
+            --red: #ef4444;
+            --red-light: #fef2f2;
+        }
+
+        .dark {
+            --background: #0f172a;
+            --foreground: #1e293b;
+            --border: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        /* General */
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem; }
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        svg { width: 1.25em; height: 1.25em; vertical-align: middle; }
+
+        /* Navigation */
+        .navbar { background: var(--foreground); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1400px; margin: 0 auto; padding: 0.75rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-icon { width: 36px; height: 36px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; }
+        .logo-text h1 { font-size: 1.125rem; color: var(--text-primary); }
+        .logo-text p { font-size: 0.75rem; color: var(--text-secondary); }
+        .nav-menu { display: flex; gap: 0.5rem; list-style: none; }
+        .nav-btn { padding: 0.5rem 1rem; background: none; border: none; border-radius: 8px; cursor: pointer; font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-btn:hover { background: var(--background); color: var(--text-primary); }
+        .nav-btn.active { background: var(--primary-light); color: var(--primary); }
+        .user-menu { display: flex; align-items: center; gap: 1rem; }
+        .theme-toggle, .notification-btn { padding: 0.5rem; background: none; border: none; border-radius: 8px; cursor: pointer; color: var(--text-secondary); position: relative; }
+        .notification-badge { position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; background: var(--red); border-radius: 50%; }
+        .user-info { display: flex; align-items: center; gap: 0.75rem; padding: 0.25rem 0.5rem 0.25rem 0.25rem; background: var(--background); border-radius: 8px; }
+        .user-avatar { width: 32px; height: 32px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.875rem; }
+        .user-details p:first-child { font-size: 0.875rem; font-weight: 500; color: var(--text-primary); }
+        #role-selector { background: transparent; border: none; font-size: 0.75rem; color: var(--text-secondary); -webkit-appearance: none; -moz-appearance: none; appearance: none; padding-right: 1rem; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.1rem center; background-repeat: no-repeat; background-size: 1.25em 1.25em; }
+        .dark #role-selector { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); }
+
+        /* Main Content */
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .page-title h2 { font-size: 1.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; }
+        .page-title p { color: var(--text-secondary); }
+        .btn-primary { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        /* Cards */
+        .card { background: var(--foreground); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .stat-card-content { display: flex; justify-content: space-between; align-items: flex-start; }
+        .stat-info p:first-child { color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .stat-info p:nth-child(2) { font-size: 1.875rem; font-weight: 700; color: var(--text-primary); }
+        .stat-info p:last-child { font-size: 0.75rem; margin-top: 0.5rem; }
+        .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .bg-blue { background: var(--primary-light); color: var(--primary); }
+        .bg-yellow { background: var(--yellow-light); color: var(--yellow); }
+        .bg-green { background: var(--green-light); color: var(--green); }
+        .bg-red { background: var(--red-light); color: var(--red); }
+        
+        /* Charts & Activity */
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; }
+        .chart-card h3 { font-size: 1.125rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem; }
+        .donut-chart-container { display: flex; align-items: center; gap: 1.5rem; }
+        .donut-chart { position: relative; width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--green) 0% var(--p1), var(--primary) var(--p1) var(--p2), var(--yellow) var(--p2) var(--p3), var(--red) var(--p3) 100%); }
+        .donut-chart::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70%; height: 70%; background: var(--foreground); border-radius: 50%; }
+        .chart-legend { flex: 1; display: flex; flex-direction: column; gap: 0.75rem; }
+        .legend-item { display: flex; align-items: center; justify-content: space-between; font-size: 0.875rem; }
+        .legend-label { display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); }
+        .legend-color { width: 10px; height: 10px; border-radius: 50%; }
+        .legend-amount { font-weight: 500; color: var(--text-primary); }
+        .activity-item { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-left { display: flex; align-items: center; gap: 0.75rem; }
+        .activity-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .activity-details p:first-child { font-weight: 500; }
+        .activity-details p:last-child { font-size: 0.75rem; color: var(--text-secondary); }
+        .activity-amount { font-weight: 600; margin-bottom: 0.25rem; }
+
+        /* Table & Filters */
+        .search-filter-section { background: var(--foreground); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+        .search-filter-controls { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .search-box { flex: 1; min-width: 250px; position: relative; }
+        .search-box input { width: 100%; padding: 0.625rem 0.75rem 0.625rem 2.5rem; background: var(--background); border: 1px solid var(--border); border-radius: 8px; font-size: 0.875rem; transition: all 0.2s; }
+        .search-box input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+        .search-icon { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
+        .filter-buttons { display: flex; gap: 0.5rem; }
+        .filter-btn { padding: 0.625rem 1rem; background: var(--background); border: 1px solid var(--border); border-radius: 8px; font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .expense-table { width: 100%; border-collapse: collapse; }
+        .expense-table thead { border-bottom: 1px solid var(--border); }
+        .expense-table th { padding: 0.75rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; }
+        .expense-table td { padding: 0.875rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+        .expense-table tbody tr:last-child td { border-bottom: none; }
+        .view-btn { display: inline-flex; align-items: center; gap: 0.25rem; color: var(--primary); font-weight: 500; cursor: pointer; }
+
+        /* Status Badges */
+        .status-badge { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 500; }
+        .status-approved { background: var(--green-light); color: var(--green); }
+        .status-pending { background: var(--yellow-light); color: var(--yellow); }
+        .status-rejected { background: var(--red-light); color: var(--red); }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--foreground); border-radius: 16px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border); animation: modalSlideIn 0.3s ease; }
+        @keyframes modalSlideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-size: 1.5rem; font-weight: 600; }
+        .close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer; }
+        .modal-body { padding: 1.5rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--text-primary); margin-bottom: 0.5rem; }
+        .form-group label .required { color: var(--red); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem; background: var(--background); border: 1px solid var(--border); border-radius: 8px; font-size: 0.875rem; color: var(--text-primary); }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .upload-area { border: 2px dashed var(--border); border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer; }
+        .upload-area:hover { border-color: var(--primary); background: var(--background); }
+        .upload-area input[type="file"] { display: none; }
+        .modal-footer { padding: 1.5rem; border-top: 1px solid var(--border); display: flex; gap: 1rem; }
+        .btn-secondary { flex: 1; padding: 0.75rem; background: var(--foreground); border: 1px solid var(--border); border-radius: 8px; font-weight: 500; color: var(--text-primary); cursor: pointer; }
+        .btn-secondary:hover { background: var(--background); }
+        .btn-submit { flex: 1; padding: 0.75rem; background: var(--primary); border: none; border-radius: 8px; font-weight: 500; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+        .loader { width: 1em; height: 1em; border: 2px solid rgba(255,255,255,0.3); border-left-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu, .user-info { display: none; }
+            .charts-grid, .form-row, .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"></path></svg>
+                </div>
+                <div class="logo-text">
+                    <h1>ExpenseFlow</h1>
+                    <p id="companyName">TechCorp Inc.</p>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li><button class="nav-btn active" onclick="showSection('dashboard')" title="Shortcut: Alt + D">Dashboard</button></li>
+                <li><button class="nav-btn" onclick="showSection('workflow')" title="Shortcut: Alt + W">Workflow</button></li>
+                <li id="admin-nav-link"><button class="nav-btn" onclick="showSection('admin')" title="Shortcut: Alt + A">Admin</button></li>
+            </ul>
+            <div class="user-menu">
+                <button class="theme-toggle" id="theme-toggle-btn" title="Toggle Theme">
+                    <svg id="theme-icon-sun" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="theme-icon-moon" class="hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">JD</div>
+                    <div class="user-details">
+                        <p id="user-name">John Doe</p>
+                        <select id="role-selector">
+                            <option value="employee">Employee</option>
+                            <option value="manager">Manager</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <div id="dashboard" class="section active">
+            <div class="page-header">
+                <div class="page-title">
+                    <h2 id="dashboard-title">My Dashboard</h2>
+                    <p id="dashboard-subtitle">Welcome back, John!</p>
+                </div>
+                <button class="btn-primary" onclick="openModal()" title="Shortcut: Ctrl + N">New Expense</button>
+            </div>
+            
+            <div id="manager-approval-card" class="card hidden">
+                <h3>Awaiting Your Approval</h3>
+                <p class="text-secondary">You have 3 items pending your approval.</p>
+            </div>
+
+            <div class="charts-grid">
+                <div class="card">
+                    <h3>Expenses by Category</h3>
+                    <div class="donut-chart-container">
+                        <div id="donut-chart" class="donut-chart"></div>
+                        <div id="chart-legend" class="chart-legend"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-item">
+                        <div class="activity-left">
+                            <div class="activity-icon bg-green">T</div>
+                            <div class="activity-details"><p>Travel</p><p>1 day ago</p></div>
+                        </div>
+                        <div class="activity-right"><p class="activity-amount">$1,250.50</p><span class="status-badge status-approved">Approved</span></div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-left">
+                            <div class="activity-icon bg-yellow">M</div>
+                            <div class="activity-details"><p>Meals</p><p>2 days ago</p></div>
+                        </div>
+                        <div class="activity-right"><p class="activity-amount">$450.00</p><span class="status-badge status-pending">Pending</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="search-filter-section">
+                <div class="search-filter-controls">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInput" placeholder="Search by description or amount..." onkeyup="filterExpenses()">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterByStatus(this, 'all')">All</button>
+                        <button class="filter-btn" onclick="filterByStatus(this, 'pending')">Pending</button>
+                        <button class="filter-btn" onclick="filterByStatus(this, 'approved')">Approved</button>
+                        <button class="filter-btn" onclick="filterByStatus(this, 'rejected')">Rejected</button>
+                    </div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="expense-table">
+                        <thead>
+                            <tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="expenseTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div id="workflow" class="section">
+            <div class="page-header"><div class="page-title"><h2>Approval Workflow</h2><p>Configure multi-level and conditional approval processes.</p></div></div>
+            <p>Workflow configuration UI would be here.</p>
+        </div>
+        
+        <div id="admin" class="section">
+            <div class="page-header"><div class="page-title"><h2>Admin Panel</h2><p>Manage companies, users, and system settings.</p></div></div>
+            <p>Admin panel for multi-tenancy and user management would be here.</p>
+        </div>
+    </main>
+
+    <div id="expenseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Submit New Expense</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+            <div class="modal-body">
+                <form id="expenseForm" onsubmit="submitExpense(event)">
+                    <div class="form-row">
+                        <div class="form-group"><label for="expenseDate">Date<span class="required">*</span></label><input type="date" id="expenseDate" required></div>
+                        <div class="form-group"><label for="expenseCategory">Category<span class="required">*</span></label>
+                            <select id="expenseCategory" required><option value="">Select category</option><option value="Travel">Travel</option><option value="Meals">Meals</option><option value="Equipment">Equipment</option><option value="Software">Software</option></select>
+                        </div>
+                    </div>
+                    <div class="form-group"><label for="expenseDescription">Description<span class="required">*</span></label><textarea id="expenseDescription" rows="2" required placeholder="e.g., Client dinner in NYC"></textarea></div>
+                    <div class="form-group"><label for="expenseAmount">Amount<span class="required">*</span></label><input type="number" id="expenseAmount" min="0.01" step="0.01" required placeholder="125.50"></div>
+                    <div class="form-group"><label for="expenseReceipt">Receipt Upload<span class="required">*</span></label>
+                        <div class="upload-area" onclick="document.getElementById('expenseReceipt').click()"><span id="receiptLabel">Click to upload (OCR supported)</span><input type="file" id="expenseReceipt" accept="image/*,.pdf" required onchange="showReceiptName(event)"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button id="submit-btn" class="btn-submit" type="submit" form="expenseForm">Submit Expense</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // --- DATA & STATE MANAGEMENT ---
+        let expenses = [];
+        const users = {
+            employee: { name: 'John Doe', role: 'employee' },
+            manager: { name: 'Sarah Lee', role: 'manager' },
+            admin: { name: 'Mike Chen', role: 'admin' }
+        };
+        let currentUser = users.employee;
+
+        // --- CORE FUNCTIONS ---
+        function init() {
+            // Theme setup
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.className = savedTheme;
+            updateThemeIcons(savedTheme);
+
+            // Load data and render UI
+            loadExpenses();
+            updateUser(currentUser.role);
+            renderTable();
+            updateChart();
+        }
+
+        function saveExpenses() {
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+        }
+
+        function loadExpenses() {
+            const savedExpenses = localStorage.getItem('expenses');
+            expenses = savedExpenses ? JSON.parse(savedExpenses) : [
+                { id: 1, date: '2025-10-03', category: 'Travel', description: 'Flight to SFO', amount: 450.50, status: 'approved' },
+                { id: 2, date: '2025-10-02', category: 'Meals', description: 'Team Lunch', amount: 125.00, status: 'pending' },
+                { id: 3, date: '2025-09-28', category: 'Equipment', description: 'New Monitor', amount: 299.99, status: 'rejected' },
+            ];
+        }
+
+        // --- UI RENDERING ---
+        function renderTable() {
+            const tbody = document.getElementById('expenseTableBody');
+            tbody.innerHTML = '';
+            expenses.forEach(exp => {
+                const tr = document.createElement('tr');
+                tr.setAttribute('data-status', exp.status);
+                tr.innerHTML = `
+                    <td>${new Date(exp.date + 'T00:00:00').toLocaleDateString()}</td>
+                    <td>${exp.category}</td>
+                    <td>${exp.description}</td>
+                    <td>$${exp.amount.toFixed(2)}</td>
+                    <td><span class="status-badge status-${exp.status}">${exp.status.charAt(0).toUpperCase() + exp.status.slice(1)}</span></td>
+                    <td><a class="view-btn">View</a></td>
+                `;
+                tbody.prepend(tr);
+            });
+        }
+        
+        function updateChart() {
+            const totals = expenses.reduce((acc, exp) => {
+                acc[exp.category] = (acc[exp.category] || 0) + exp.amount;
+                return acc;
+            }, {});
+            const totalAmount = Object.values(totals).reduce((sum, val) => sum + val, 0);
+
+            let cumulativePercent = 0;
+            const chartData = Object.entries(totals).map(([category, amount]) => {
+                const percent = totalAmount > 0 ? (amount / totalAmount) * 100 : 0;
+                const item = { category, amount, percent };
+                return item;
+            });
+
+            const colors = { Travel: 'var(--green)', Meals: 'var(--primary)', Equipment: 'var(--yellow)', Software: 'var(--red)' };
+            
+            let gradientStops = [];
+            document.getElementById('chart-legend').innerHTML = chartData.map(item => {
+                const start = cumulativePercent;
+                cumulativePercent += item.percent;
+                const end = cumulativePercent;
+                gradientStops.push(`${colors[item.category]} ${start}% ${end}%`);
+
+                return `<div class="legend-item">
+                    <div class="legend-label"><span class="legend-color" style="background:${colors[item.category]}"></span>${item.category}</div>
+                    <span class="legend-amount">$${item.amount.toFixed(2)}</span>
+                </div>`;
+            }).join('');
+            
+            document.getElementById('donut-chart').style.background = `conic-gradient(${gradientStops.join(', ')})`;
+        }
+        
+        function updateUser(role) {
+            currentUser = users[role];
+            document.getElementById('user-name').textContent = currentUser.name;
+            document.getElementById('user-avatar').textContent = currentUser.name.split(' ').map(n => n[0]).join('');
+            document.getElementById('dashboard-subtitle').textContent = `Welcome back, ${currentUser.name.split(' ')[0]}!`;
+            
+            // UI visibility based on role
+            document.getElementById('manager-approval-card').classList.toggle('hidden', role !== 'manager');
+            document.getElementById('admin-nav-link').classList.toggle('hidden', role !== 'admin');
+            
+            // Ensure correct section is shown if admin-only section was active
+            if (role !== 'admin' && document.getElementById('admin').classList.contains('active')) {
+                showSection('dashboard');
+            }
+        }
+
+        // --- EVENT HANDLERS & INTERACTIONS ---
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick').includes(sectionId)) btn.classList.add('active');
+            });
+        }
+
+        function openModal() { document.getElementById('expenseModal').classList.add('active'); }
+        function closeModal() { document.getElementById('expenseModal').classList.remove('active'); document.getElementById('expenseForm').reset(); }
+        function showReceiptName(e) { document.getElementById('receiptLabel').textContent = e.target.files[0] ? e.target.files[0].name : 'Click to upload'; }
+
+        function submitExpense(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<div class="loader"></div> Saving...';
+
+            setTimeout(() => { // Simulate API call
+                const newExpense = {
+                    id: Date.now(),
+                    date: document.getElementById('expenseDate').value,
+                    category: document.getElementById('expenseCategory').value,
+                    description: document.getElementById('expenseDescription').value,
+                    amount: parseFloat(document.getElementById('expenseAmount').value),
+                    status: 'pending'
+                };
+                expenses.push(newExpense);
+                saveExpenses();
+                renderTable();
+                updateChart();
+                closeModal();
+
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Submit Expense';
+            }, 1000);
+        }
+
+        function filterByStatus(btn, status) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const rows = document.querySelectorAll('#expenseTableBody tr');
+            rows.forEach(row => {
+                row.style.display = (status === 'all' || row.getAttribute('data-status') === status) ? '' : 'none';
+            });
+        }
+
+        function filterExpenses() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('#expenseTableBody tr').forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
+            });
+        }
+        
+        function toggleTheme() {
+            const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+            document.documentElement.className = newTheme;
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcons(newTheme);
+        }
+
+        function updateThemeIcons(theme) {
+            document.getElementById('theme-icon-sun').classList.toggle('hidden', theme === 'dark');
+            document.getElementById('theme-icon-moon').classList.toggle('hidden', theme === 'light');
+        }
+
+        // --- EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', init);
+        document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+        document.getElementById('role-selector').addEventListener('change', (e) => updateUser(e.target.value));
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+            if (e.ctrlKey && e.key.toLowerCase() === 'n') { e.preventDefault(); openModal(); }
+            if (e.altKey) {
+                switch(e.key.toLowerCase()) {
+                    case 'd': showSection('dashboard'); break;
+                    case 'w': showSection('workflow'); break;
+                    case 'a': if (currentUser.role === 'admin') showSection('admin'); break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

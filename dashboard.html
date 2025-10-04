@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ExpenseFlow</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<div class="dashboard-grid">
+    <aside class="sidebar">
+        <h1 class="nav-logo">ExpenseFlow</h1>
+        <nav class="sidebar-menu">
+            <a href="#" class="active"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+            <a href="#"><i class="fa-solid fa-file-invoice-dollar"></i> My Expenses</a>
+            <a href="#"><i class="fa-solid fa-users"></i> Team Approvals</a>
+            <a href="#"><i class="fa-solid fa-cog"></i> Settings</a>
+            <a href="#"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header>
+            <h1>Welcome back, Sara!</h1>
+            <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> New Expense</button>
+        </header>
+
+        <section class="card">
+            <div class="card-header">
+                <h2>Items Awaiting Your Approval</h2>
+                <a href="#">View All</a>
+            </div>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>David Lee</td>
+                        <td>Oct 03, 2025</td>
+                        <td>Client Lunch Meeting</td>
+                        <td>$75.50</td>
+                        <td><a href="#" class="btn btn-secondary">Review</a></td>
+                    </tr>
+                    <tr>
+                        <td>Maria Garcia</td>
+                        <td>Oct 02, 2025</td>
+                        <td>Taxi to Airport</td>
+                        <td>€25.00</td>
+                        <td><a href="#" class="btn btn-secondary">Review</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+        <section class="card">
+            <div class="card-header">
+                <h2>My Recent Expenses</h2>
+                <a href="#">View All</a>
+            </div>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Oct 04, 2025</td>
+                        <td>Team Dinner</td>
+                        <td>₹1500.00</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td>Sep 28, 2025</td>
+                        <td>Software Subscription</td>
+                        <td>$49.00</td>
+                        <td><span class="status status-approved">Approved</span></td>
+                    </tr>
+                    <tr>
+                        <td>Sep 25, 2025</td>
+                        <td>Office Supplies</td>
+                        <td>$112.30</td>
+                        <td><span class="status status-approved">Approved</span></td>
+                    </tr>
+                     <tr>
+                        <td>Sep 22, 2025</td>
+                        <td>Travel fare discrepancy</td>
+                        <td>$30.00</td>
+                        <td><span class="status status-rejected">Rejected</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started - TrackKro</title>
+    <link rel="icon" href="favicon.ico">
+    <meta name="description" content="TrackKro - Effortless expense management for modern teams.">
+    <meta name="theme-color" content="#8e2de2">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        :root {
+            --bg-color: #0d0c22;
+            --card-color: #1a1936;
+            --text-color: #e0e0e0;
+            --primary-gradient: linear-gradient(90deg, #8e2de2, #4a00e0);
+            --primary-color-start: #8e2de2;
+            --primary-color-end: #4a00e0;
+            --input-bg: #2a2a4a;
+            --input-border: #4a4a6a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 1% 1%, rgba(142, 45, 226, 0.3), transparent 30%),
+                              radial-gradient(circle at 99% 99%, rgba(74, 0, 224, 0.3), transparent 40%);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(142, 45, 226, 0.5);
+            border-radius: 50%;
+            animation: float-particle 15s infinite ease-in-out;
+        }
+        @keyframes float-particle {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        .split-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            animation: slideInLeft 0.8s ease-out;
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 2.5rem;
+            background-color: var(--card-color);
+            border-radius: 16px;
+            border: 1px solid var(--input-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeInScale 0.8s ease-out 0.2s both;
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse-glow 3s infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(142, 45, 226, 0.5)); }
+            50% { filter: drop-shadow(0 0 20px rgba(142, 45, 226, 0.8)); }
+        }
+        .tagline {
+            color: #a0a0c0;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .social-buttons {
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.8s ease-out 0.5s both;
+        }
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .social-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        .google-btn {
+            background: #fff;
+            color: #4a00e0;
+            margin-bottom: 0.5rem;
+        }
+        .github-btn {
+            background: #24292f;
+            color: #fff;
+        }
+        .form-toggle {
+            display: flex;
+            background-color: var(--input-bg);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--input-border);
+            animation: fadeIn 0.8s ease-out 0.6s both;
+            position: relative;
+        }
+        .toggle-slider {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: calc(50% - 4px);
+            height: calc(100% - 8px);
+            background: var(--primary-gradient);
+            border-radius: 6px;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 15px rgba(142, 45, 226, 0.4);
+        }
+        .toggle-slider.right {
+            transform: translateX(calc(100% + 4px));
+        }
+        .toggle-btn {
+            flex: 1;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+            color: #a0a0c0;
+            position: relative;
+            z-index: 1;
+        }
+        .toggle-btn.active {
+            color: white;
+        }
+        .form-section {
+            display: none;
+            animation: slideInFade 0.5s ease-out;
+        }
+        .form-section.active {
+            display: block;
+        }
+        @keyframes slideInFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+            animation: fadeInUp 0.5s ease-out both;
+        }
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.15s; }
+        .form-group:nth-child(3) { animation-delay: 0.2s; }
+        .form-group:nth-child(4) { animation-delay: 0.25s; }
+        .form-group:nth-child(5) { animation-delay: 0.3s; }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            color: #c0c0e0;
+            transition: color 0.3s ease;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color-start);
+            box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.3);
+            transform: translateY(-2px);
+        }
+        .form-group input:focus + label {
+            color: var(--primary-color-start);
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .submit-btn:hover::after {
+            width: 400px;
+            height: 400px;
+        }
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(74, 0, 224, 0.6);
+        }
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+        .bottom-link {
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            color: #a0a0c0;
+            animation: fadeIn 1s ease-out 0.8s both;
+        }
+        .bottom-link a {
+            color: var(--primary-color-start);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+        }
+        .bottom-link a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+        }
+        .bottom-link a:hover::after {
+            width: 100%;
+        }
+        .error-message {
+            color: #ff7b7b;
+            font-size: 0.875rem;
+            text-align: left;
+            margin-top: -1rem;
+            margin-bottom: 1.5rem;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .password-strength-meter {
+            height: 6px;
+            background-color: var(--input-bg);
+            border-radius: 3px;
+            margin-top: -1rem;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+        .strength-bar {
+            height: 100%;
+            width: 0;
+            border-radius: 3px;
+            transition: width 0.5s ease, background-color 0.3s ease;
+            position: relative;
+        }
+        .strength-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .strength-bar.weak { background-color: #ef4444; }
+        .strength-bar.medium { background-color: #f59e0b; }
+        .strength-bar.strong { background-color: #10b981; }
+        .strength-text {
+            font-size: 0.75rem;
+            text-align: right;
+            margin-bottom: 1.5rem;
+            color: #a0a0c0;
+            height: 1em;
+            transition: color 0.3s ease;
+        }
+        .loader {
+            width: 1em;
+            height: 1em;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-left-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .info-container {
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+            animation: slideInRight 0.8s ease-out;
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .info-content { position: relative; z-index: 2; }
+        .info-container h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+        .info-container p {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+        .feature-list { list-style: none; padding: 0; }
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease-out both;
+            transition: transform 0.3s ease;
+        }
+        .feature-item:nth-child(1) { animation-delay: 0.5s; }
+        .feature-item:nth-child(2) { animation-delay: 0.6s; }
+        .feature-item:nth-child(3) { animation-delay: 0.7s; }
+        .feature-item:nth-child(4) { animation-delay: 0.8s; }
+        .feature-item:nth-child(5) { animation-delay: 0.9s; }
+        .feature-item:hover {
+            transform: translateX(10px);
+        }
+        .feature-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .feature-item:hover .feature-icon {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(5deg) scale(1.1);
+        }
+        .feature-item h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
+        }
+        .feature-item p {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0;
+        }
+        .info-animation-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+        }
+        .anim-shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            animation: float 10s infinite ease-in-out;
+            backdrop-filter: blur(5px);
+        }
+        .anim-shape.card-1 {
+            width: 250px; height: 150px; top: 15%; left: 10%; animation-duration: 12s;
+        }
+        .anim-shape.card-2 {
+            width: 180px; height: 220px; top: 50%; left: 60%; animation-duration: 15s; animation-delay: -5s;
+        }
+        .anim-shape.circle-1 {
+            width: 80px; height: 80px; border-radius: 50%; top: 70%; left: 15%; animation-duration: 10s; animation-delay: -2s;
+        }
+        .anim-shape.card-3 {
+            width: 120px; height: 100px; top: 20%; left: 80%; animation-duration: 13s; animation-delay: -7s;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg) scale(1); }
+            33% { transform: translateY(-25px) rotate(5deg) scale(1.05); }
+            66% { transform: translateY(15px) rotate(-3deg) scale(0.95); }
+            100% { transform: translateY(0px) rotate(0deg) scale(1); }
+        }
+        @media (max-width: 900px) {
+            .split-layout { grid-template-columns: 1fr; }
+            .info-container { display: none; }
+            .form-container { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="split-layout">
+        <div class="form-container">
+            <div class="container">
+                <h1 class="logo">TrackKro</h1>
+                <p class="tagline">Join or create your company workspace.</p>
+                
+                <div class="social-buttons">
+                    <button class="social-btn google-btn">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" width="20" height="20"> 
+                        <span>Sign up with Google</span>
+                    </button>
+                    <button class="social-btn github-btn">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" width="20" height="20"> 
+                        <span>Sign up with GitHub</span>
+                    </button>
+                </div>
+                
+                <div class="form-toggle">
+                    <div class="toggle-slider" id="toggleSlider"></div>
+                    <button class="toggle-btn active" id="create-company-btn">Create a Company</button>
+                    <button class="toggle-btn" id="join-company-btn">Join a Company</button>
+                </div>
+                
+                <div style="position: relative; min-height: 480px;">
+                    <div id="company-form" class="form-section active">
+                        <form id="companyRegisterForm">
+                            <div class="form-group">
+                                <label for="companyName">Company Name</label>
+                                <input type="text" id="companyName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adminName">Your Full Name</label>
+                                <input type="text" id="adminName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adminEmail">Your Email</label>
+                                <input type="email" id="adminEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adminPassword">Password</label>
+                                <input type="password" id="adminPassword" required>
+                            </div>
+                            <div class="password-strength-meter"><div id="adminStrengthBar" class="strength-bar"></div></div>
+                            <p id="adminStrengthText" class="strength-text"></p>
+                            <div class="form-group">
+                                <label for="adminConfirmPassword">Confirm Password</label>
+                                <input type="password" id="adminConfirmPassword" required>
+                            </div>
+                            <p class="error-message" id="adminError"></p>
+                            <button type="submit" class="submit-btn" id="adminSubmitBtn">Create & Register as Admin</button>
+                        </form>
+                    </div>
+                    
+                    <div id="employee-form" class="form-section">
+                        <form id="employeeRegisterForm">
+                            <div class="form-group">
+                                <label for="inviteCode">Company Invite Code</label>
+                                <input type="text" id="inviteCode" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="employeeName">Your Full Name</label>
+                                <input type="text" id="employeeName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="employeeEmail">Your Email</label>
+                                <input type="email" id="employeeEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="employeePassword">Password</label>
+                                <input type="password" id="employeePassword" required>
+                            </div>
+                            <div class="password-strength-meter"><div id="employeeStrengthBar" class="strength-bar"></div></div>
+                            <p id="employeeStrengthText" class="strength-text"></p>
+                            <div class="form-group">
+                                <label for="employeeConfirmPassword">Confirm Password</label>
+                                <input type="password" id="employeeConfirmPassword" required>
+                            </div>
+                            <p class="error-message" id="employeeError"></p>
+                            <button type="submit" class="submit-btn" id="employeeSubmitBtn">Join & Register as Employee</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <p class="bottom-link">
+                    Already have an account? <a href="login.html">Sign In</a>
+                </p>
+                <p class="bottom-link" style="margin-top: 0.5rem;">
+                    <a href="help.html" aria-label="Help Center">Need help?</a>
+                </p>
+            </div>
+        </div>
+        
+        <div class="info-container">
+            <div class="info-animation-container">
+                <div class="anim-shape card-1"></div>
+                <div class="anim-shape card-2"></div>
+                <div class="anim-shape circle-1"></div>
+                <div class="anim-shape card-3"></div>
+            </div>
+            <div class="info-content">
+                <h2>Unlock Effortless Expense Management</h2>
+                <p>Transform your business with intelligent automation, real-time insights, and seamless integrations.</p>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5zM13.5 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5z" /></svg>
+                        </div>
+                        <div>
+                            <h3>Automated Workflows</h3>
+                            <p>Create custom approval chains that match your company's policies perfectly.</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <div>
+                            <h3>AI-Powered Scanning</h3>
+                            <p>Our intelligent OCR reads receipts instantly, eliminating manual data entry.</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                        </div>
+                        <div>
+                            <h3>Real-time Insights</h3>
+                            <p>Get a clear overview of company spending with powerful, interactive dashboards.</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <div>
+                            <h3>Instant Notifications</h3>
+                            <p>Stay updated with real-time alerts for approvals, rejections, and new submissions.</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
+                        </div>
+                        <div>
+                            <h3>Bank Integration</h3>
+                            <p>Connect your company account for seamless reimbursement and reconciliation.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer style="text-align:center; color:#a0a0c0; padding:1.5rem 0; font-size:0.95rem;">
+        &copy; 2025 TrackKro &mdash; <a href="privacy.html" style="color:#8e2de2; transition: color 0.3s;">Privacy</a> &middot; <a href="terms.html" style="color:#8e2de2; transition: color 0.3s;">Terms</a>
+    </footer>
+    
+    <script>
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'px');
+            particle.style.setProperty('--ty', (Math.random() - 0.5) * 200 + 'px');
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        const createCompanyBtn = document.getElementById('create-company-btn');
+        const joinCompanyBtn = document.getElementById('join-company-btn');
+        const companyForm = document.getElementById('company-form');
+        const employeeForm = document.getElementById('employee-form');
+        const toggleSlider = document.getElementById('toggleSlider');
+        
+        function toggleForms(showForm, hideForm, showBtn, hideBtn, isRight) {
+            hideForm.classList.remove('active');
+            hideBtn.classList.remove('active');
+            
+            if (isRight) {
+                toggleSlider.classList.add('right');
+            } else {
+                toggleSlider.classList.remove('right');
+            }
+            
+            setTimeout(() => {
+                showForm.classList.add('active');
+                showBtn.classList.add('active');
+            }, 150);
+        }
+        
+        createCompanyBtn.addEventListener('click', () => {
+            toggleForms(companyForm, employeeForm, createCompanyBtn, joinCompanyBtn, false);
+            setTimeout(() => document.getElementById('companyName').focus(), 200);
+        });
+        
+        joinCompanyBtn.addEventListener('click', () => {
+            toggleForms(employeeForm, companyForm, joinCompanyBtn, createCompanyBtn, true);
+            setTimeout(() => document.getElementById('inviteCode').focus(), 200);
+        });
+        
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/)) strength++;
+            if (password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+            if (strength <= 2) return { level: 'weak', width: '33%' };
+            if (strength <= 4) return { level: 'medium', width: '66%' };
+            return { level: 'strong', width: '100%' };
+        }
+        
+        function updateStrengthMeter(passwordInput, strengthBar, strengthText) {
+            const password = passwordInput.value;
+            if (!password) {
+                strengthBar.style.width = '0%';
+                strengthText.textContent = '';
+                return;
+            }
+            const strength = checkPasswordStrength(password);
+            strengthBar.className = `strength-bar ${strength.level}`;
+            strengthBar.style.width = strength.width;
+            strengthText.textContent = strength.level.charAt(0).toUpperCase() + strength.level.slice(1);
+            
+            // Add color to strength text
+            if (strength.level === 'weak') strengthText.style.color = '#ef4444';
+            else if (strength.level === 'medium') strengthText.style.color = '#f59e0b';
+            else strengthText.style.color = '#10b981';
+        }
+        
+        document.getElementById('adminPassword').addEventListener('input', (e) => 
+            updateStrengthMeter(e.target, document.getElementById('adminStrengthBar'), document.getElementById('adminStrengthText'))
+        );
+        
+        document.getElementById('employeePassword').addEventListener('input', (e) => 
+            updateStrengthMeter(e.target, document.getElementById('employeeStrengthBar'), document.getElementById('employeeStrengthText'))
+        );
+        
+        function handleFormSubmit(formId, passwordId, confirmPasswordId, errorId, buttonId, successUrl) {
+            document.getElementById(formId).addEventListener('submit', (e) => {
+                e.preventDefault();
+                const password = document.getElementById(passwordId).value;
+                const confirmPassword = document.getElementById(confirmPasswordId).value;
+                const errorElement = document.getElementById(errorId);
+                const submitBtn = document.getElementById(buttonId);
+                
+                errorElement.style.display = "none";
+                
+                if (password !== confirmPassword) {
+                    errorElement.textContent = "Passwords do not match.";
+                    errorElement.style.display = "block";
+                    return;
+                }
+                
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<span class="loader"></span> Please wait...`;
+                
+                setTimeout(() => {
+                    window.location.href = successUrl;
+                }, 1500);
+            });
+        }
+        
+        handleFormSubmit('companyRegisterForm', 'adminPassword', 'adminConfirmPassword', 'adminError', 'adminSubmitBtn', 'admin.html');
+        handleFormSubmit('employeeRegisterForm', 'employeePassword', 'employeeConfirmPassword', 'employeeError', 'employeeSubmitBtn', 'employee.html');
+        
+        // Add ripple effect to social buttons
+        document.querySelectorAll('.social-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.5);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s ease-out;
+                    pointer-events: none;
+                `;
+                
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+        
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Input focus animations
+        document.querySelectorAll('.form-group input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

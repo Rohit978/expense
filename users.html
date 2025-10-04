@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackKro Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0d0c15; min-height: 100vh; color: white; }
+        .dashboard-bg-gradient::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 10% 10%, rgba(139, 92, 246, 0.1), transparent 50%), radial-gradient(circle at 90% 90%, rgba(236, 72, 153, 0.1), transparent 50%); z-index: -1; opacity: 0.8; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
+        .submit-btn { background: linear-gradient(to right, #8b5cf6, #ec4899); transition: transform 0.1s ease, box-shadow 0.1s ease; }
+        .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
+        .nav-link.active { color: #a78bfa; border-bottom-width: 2px; border-color: #a78bfa; }
+        .modal-backdrop { background-color: rgba(0, 0, 0, 0.7); z-index: 50; }
+    </style>
+</head>
+<body class="dashboard-bg-gradient">
+
+    <script>
+        // --- API Configuration ---
+        const API_BASE_URL = 'http://localhost:3001/api'; // Your backend server URL
+
+        // --- State Management (will be populated by the API) ---
+        let userProfile = {};
+        let expenses = [];
+        let budget = 0;
+
+        // --- Core Data Fetching Function ---
+        async function fetchDashboardData() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                // If no token, redirect to the login page.
+                window.location.href = './login.html';
+                return;
+            }
+
+            try {
+                // This single endpoint should return all necessary data
+                const response = await fetch(`${API_BASE_URL}/dashboard-data`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        localStorage.removeItem('authToken');
+                        window.location.href = './login.html';
+                    }
+                    throw new Error('Failed to fetch dashboard data.');
+                }
+
+                const data = await response.json();
+
+                // Populate state with live data from the server
+                userProfile = data.profile;
+                expenses = data.expenses;
+                budget = data.budget;
+
+                // Once data is successfully fetched, initialize all UI components
+                initializeDashboard();
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.body.innerHTML = `<div class="text-center p-8 text-red-400">Error: Could not connect to the server. Please try logging in again. <a href="./login.html" class="text-purple-400">Go to Login</a></div>`;
+            }
+        }
+
+        // --- Initialization Function (runs after data is fetched) ---
+        function initializeDashboard() {
+            lucide.createIcons(); // Initialize icons
+
+            // Setup Navigation
+            document.getElementById('main-nav').addEventListener('click', (e) => {
+                if (e.target.classList.contains('nav-link')) {
+                    e.preventDefault();
+                    handleNavigation(e.target.getAttribute('data-section'));
+                }
+            });
+
+            // Setup Currency Selector
+            document.getElementById('currency-selector').addEventListener('change', (e) => {
+                const currencyCode = e.target.value;
+                updateSummaryStats(currencyCode);
+                if (!document.getElementById('expenses-section').classList.contains('hidden')) {
+                    renderCategorizedExpenses(currencyCode);
+                }
+                if (!document.getElementById('reports-section').classList.contains('hidden')) {
+                    renderReports(currencyCode);
+                }
+            });
+
+            // Setup Logout Button
+            document.querySelector('button.bg-gray-700').addEventListener('click', () => {
+                localStorage.removeItem('authToken');
+                window.location.href = './login.html';
+            });
+
+            // Setup Form Submissions
+            setupFormListeners();
+
+            // Initial UI update
+            document.getElementById('user-display-name').textContent = userProfile.name || 'User';
+            handleNavigation('overview'); // Show the overview section by default
+            
+            setTimeout(() => {
+                updateSummaryStats(document.getElementById('currency-selector').value);
+            }, 50);
+        }
+
+        function setupFormListeners() {
+            // Expense Form
+            document.getElementById('expenseForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const token = localStorage.getItem('authToken');
+                const expenseData = {
+                    date: document.getElementById('expense-date').value,
+                    merchant: document.getElementById('description').value,
+                    amount: parseFloat(document.getElementById('amount-input').value),
+                    category: document.getElementById('category').value
+                };
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/expenses`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        body: JSON.stringify(expenseData)
+                    });
+                    if (!response.ok) throw new Error('Submission failed');
+                    
+                    // On success, refetch all data to get the latest state
+                    await fetchDashboardData();
+                    // You might want a more subtle update, but refetching is simplest
+                    
+                } catch (error) {
+                    console.error('Error submitting expense:', error);
+                }
+            });
+
+            // Profile Settings Form
+            document.getElementById('profileSettingsForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const token = localStorage.getItem('authToken');
+                const profileData = {
+                    name: document.getElementById('profile-name').value,
+                    email: document.getElementById('profile-email').value,
+                    //... collect other profile fields
+                };
+                // Add API call to PUT /api/profile
+            });
+
+            // ... add listeners for password change and budget forms similarly ...
+        }
+
+        // --- All other functions (render tables, charts, modals, etc.) remain the same ---
+        // They will now automatically use the global `expenses`, `userProfile`, and `budget`
+        // variables, which are populated with live data.
+
+        // ... Paste all your helper functions here: ...
+        // formatCurrency, renderExpensesTable, renderCategorizedExpenses, renderPieChart,
+        // handleNavigation, showModal, hideModal, etc.
+
+
+        // --- Entry Point ---
+        document.addEventListener('DOMContentLoaded', fetchDashboardData);
+
+    </script>
+</body>
+</html>

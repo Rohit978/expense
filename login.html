@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - TrackKro</title>
+    <style>
+        /* Your existing CSS remains unchanged */
+:root {
+    --bg-color: #0d0c22;
+    --card-color: #1a1936;
+    --text-color: #e0e0e0;
+    --primary-gradient: linear-gradient(90deg, #8e2de2, #4a00e0);
+    --primary-color-start: #8e2de2;
+    --primary-color-end: #4a00e0;
+    --input-bg: #2a2a4a;
+    --input-border: #4a4a6a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: radial-gradient(circle at 1% 1%, rgba(142, 45, 226, 0.3), transparent 30%),
+                      radial-gradient(circle at 99% 99%, rgba(74, 0, 224, 0.3), transparent 40%);
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 2.5rem;
+    background-color: var(--card-color);
+    border-radius: 16px;
+    border: 1px solid var(--input-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tagline {
+    color: #a0a0c0;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    color: #c0c0e0;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color-start);
+    box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.3);
+}
+
+/* Role Selector */
+.role-selector {
+    display: flex;
+    background-color: var(--input-bg);
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--input-border);
+}
+
+.role-selector input[type="radio"] {
+    display: none;
+}
+
+.role-selector label {
+    flex: 1;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.role-selector input[type="radio"]:checked + label {
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: 0 4px 15px rgba(142, 45, 226, 0.4);
+}
+
+/* Submit Button */
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(74, 0, 224, 0.5);
+}
+
+/* Bottom Link */
+.bottom-link {
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: #a0a0c0;
+}
+
+.bottom-link a {
+    color: var(--primary-color-start);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.bottom-link a:hover {
+    text-decoration: underline;
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="logo">TrackKro</h1>
+        <p class="tagline">Welcome back! Please sign in.</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            
+            <label>Login as:</label>
+            <div class="role-selector">
+                <input type="radio" id="employee" name="role" value="employee" checked>
+                <label for="employee">Employee</label>
+                <input type="radio" id="admin" name="role" value="admin">
+                <label for="admin">Admin</label>
+            </div>
+
+            <button type="submit" class="submit-btn">Sign In</button>
+            
+            <p id="error-message" class="text-red-500 text-sm mt-4"></p>
+        </form>
+
+        <p class="bottom-link">
+            Don't have an account? <a href="register.html">Register Now</a>
+        </p>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3001/api'; // Your backend API URL
+
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Stop the form from submitting normally
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const selectedRole = document.querySelector('input[name="role"]:checked').value;
+            const errorMessageDiv = document.getElementById('error-message');
+            errorMessageDiv.textContent = ''; // Clear previous errors
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Login failed. Please check your credentials.');
+                }
+
+                // --- Successful Login ---
+                
+                // 1. Save the authentication token
+                localStorage.setItem('authToken', data.authToken);
+
+                // 2. Decode the token to check the user's actual role from the server
+                // This is a simple client-side decode. The server has already validated the user.
+                const payload = JSON.parse(atob(data.authToken.split('.')[1]));
+                const userRole = payload.role; // Assumes 'role' is in your JWT payload
+
+                // 3. Redirect based on the *actual* role from the server
+                if (userRole === 'Admin') {
+                    window.location.href = 'admin-master.html'; // Or your main admin page
+                } else {
+                    window.location.href = 'user.html'; // Or your main employee page
+                }
+                
+            } catch (error) {
+                errorMessageDiv.textContent = error.message;
+            }
+        });
+    </script>
+</body>
+</html>
